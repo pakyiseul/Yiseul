@@ -1,0 +1,120 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Chunk Vault</title><style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#222;--muted:#777;--line:#e7e0d8;--accent:#272727;--soft:#ece7df;--ok:#dfe9df}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}.wrap{max-width:980px;margin:auto;padding:28px 18px 70px}.top{display:flex;gap:14px;justify-content:space-between;align-items:flex-end;flex-wrap:wrap}.eyebrow{font-size:12px;letter-spacing:.16em;color:#8b8177;font-weight:700}.title{font-size:34px;margin:5px 0 2px}.sub{color:var(--muted);font-size:14px}.progressbox{min-width:230px}.progressline{height:9px;background:#e3ddd5;border-radius:99px;overflow:hidden;margin-top:8px}.bar{height:100%;background:#333;width:0;transition:.2s}.toolbar,.tabs,.cats{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.cats{margin-top:12px}.catbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 11px;font-size:12px;cursor:pointer}.catbtn.active{background:#252525;color:white;border-color:#252525}.catbtn[data-cat="FRAME"]{box-shadow:inset 3px 0 #7557A5}.catbtn[data-cat="VERB"]{box-shadow:inset 3px 0 #4777A8}.catbtn[data-cat="STATE"]{box-shadow:inset 3px 0 #4E8B70}.catbtn[data-cat="PATTERN"]{box-shadow:inset 3px 0 #C17842}.catbtn[data-cat="MODIFIER"]{box-shadow:inset 3px 0 #B69A36}.tabs{margin-top:28px}.btn,.tab{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 13px;font-size:14px;cursor:pointer}.btn.active,.tab.active{background:#252525;color:white;border-color:#252525}.search{flex:1;min-width:180px;border:1px solid var(--line);background:white;border-radius:12px;padding:10px 13px;font-size:14px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin:26px 2px 12px}.sectionHead h2{font-size:17px;margin:0}.count{font-size:12px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 3px 14px rgba(40,30,20,.035)}.card.done{background:#f4f8f3;border-color:#d9e4d7}.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.tag{font-size:11px;color:#81776e;background:#f3efe9;padding:5px 8px;border-radius:99px}.eng{font-size:19px;font-weight:750;line-height:1.35;margin:12px 0 8px}.meaning{font-size:14px;line-height:1.55}.meaning.hidden,.example.hidden{filter:blur(7px);user-select:none;cursor:pointer}.example{margin-top:9px;color:#6c665f;font-size:13px;line-height:1.5}.actions{display:flex;gap:7px;margin-top:14px;flex-wrap:wrap}.mini{border:1px solid var(--line);background:white;border-radius:9px;padding:7px 9px;font-size:12px;cursor:pointer}.done .memorize{background:#344c37;color:white;border-color:#344c37}.empty{padding:45px;text-align:center;color:#888;background:white;border:1px dashed var(--line);border-radius:18px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.panel{width:min(520px,100%);background:white;border-radius:20px;padding:20px}.panel h3{margin:0 0 15px}.field{display:block;margin:10px 0}.field span{font-size:12px;color:#666}.field input,.field textarea,.field select{width:100%;margin-top:5px;padding:10px;border:1px solid var(--line);border-radius:10px;font:inherit}.panelBtns{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.danger{color:#9b3f3f}.footer{margin-top:30px;color:#8a8178;font-size:12px;text-align:center}@media(max-width:650px){.grid{grid-template-columns:1fr}.title{font-size:29px}.progressbox{width:100%}}
+.authbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin:12px 0}.authstatus{font-size:12px;color:var(--muted)}
+</style><script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCiSLaKC-VvZPAJVzBkp9enxDgd1gnlVSs",authDomain:"english-record-f48f5.firebaseapp.com",projectId:"english-record-f48f5",storageBucket:"english-record-f48f5.firebasestorage.app",messagingSenderId:"50579386907",appId:"1:50579386907:web:ac61ebf695f7de1b383ebe"};
+const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app), provider=new GoogleAuthProvider();
+window.__cloud={auth,db,provider,doc,getDoc,setDoc,onSnapshot,signInWithPopup,signInWithRedirect,getRedirectResult,onAuthStateChanged,signOut};
+</script></head><body><div class="wrap"><div class="top"><div><div class="eyebrow">MY ENGLISH CHUNK VAULT</div><h1 class="title">말하기 표현 저장소</h1><div class="sub">외우는 단어장이 아니라, 입에서 바로 꺼내기 위한 단어장.</div></div><div class="progressbox"><div id="progressText">0 / 0 암기 완료</div><div class="progressline"><div id="bar" class="bar"></div></div></div></div>
+<div class="authbar"><span class="authstatus" id="authStatus">클라우드 연결 준비 중…</span><button class="btn" id="loginBtn">Google 로그인</button><button class="btn" id="logoutBtn" style="display:none">로그아웃</button></div><div class="tabs" id="tabs"></div>
+<div class="cats" id="cats"></div>
+<div class="toolbar"><button class="btn" id="toggleAll">👁 뜻 전체 가리기</button><button class="btn" id="direction">KR → EN</button><button class="btn" id="unlearned">미암기만 보기</button><input class="search" id="search" placeholder="표현 검색"><button class="btn" id="addCard">＋ 표현 추가</button><button class="btn" id="addDay">＋ DAY 추가</button></div>
+<div id="content"></div><div class="footer">Google 로그인 시 모든 기기에서 자동 동기화됩니다 · Chunk Vault</div></div>
+<div class="modal" id="modal"><div class="panel"><h3 id="modalTitle">표현 추가</h3><label class="field"><span>분류</span><select id="fType"><option value="FRAME">FRAME · 말문 프레임</option><option value="VERB">VERB CHUNK · 동사 덩어리</option><option value="STATE">STATE · 상태/취향</option><option value="PATTERN">PATTERN · 문장 패턴</option><option value="MODIFIER">MODIFIER · 조절 표현</option><option value="VOCAB">VOCAB · 단어</option></select></label><label class="field"><span>영어</span><input id="fEng"></label><label class="field"><span>뜻</span><input id="fKor"></label><label class="field"><span>예문</span><textarea id="fEx" rows="3"></textarea></label><div class="panelBtns"><button class="btn" id="cancel">취소</button><button class="btn active" id="save">저장</button></div></div></div>
+<script>
+const CAT={
+FRAME:{label:'SENTENCE FRAME',desc:'뒤에 내용을 붙여 문장 전체를 여는 틀',icon:'🟣'},
+VERB:{label:'VERB CHUNK',desc:'동사가 핵심인 표현 덩어리',icon:'🔵'},
+STATE:{label:'STATE CHUNK',desc:'be동사 기반 상태·성향',icon:'🟢'},
+PATTERN:{label:'GRAMMAR PATTERN',desc:'단어를 바꿔 끼우는 문법 공식',icon:'🟠'},
+MODIFIER:{label:'CONNECTOR / MODIFIER',desc:'연결·정도·뉘앙스를 더하는 표현',icon:'🟡'},
+VOCAB:{label:'VOCAB',desc:'청크가 아닌 단일 단어',icon:'⚪'}
+};
+const seed=[
+['FRAME','I feel like ~','~인 것 같다 / ~라고 느낀다','I feel like my English is getting better.'],['PATTERN','I tend to ~','나는 ~하는 편이다','I tend to put things off.'],['FRAME','I’d say ~','굳이 말하자면 / 내 생각엔','I’d say I’m pretty introverted.'],['FRAME','I guess ~','~인 것 같아 / 아마','I guess I need more practice.'],['MODIFIER','pretty + adjective','꽤 ~하다','I’m pretty tired.'],['MODIFIER','kind of ~','좀 / 약간 ~','I’m kind of tired.'],['MODIFIER','not really','별로 / 꼭 그렇진 않아','I don’t really like crowded places.'],['FRAME','I wouldn’t say ~','~라고까지 하진 않겠다','I wouldn’t say I’m good at cooking.'],['FRAME','I wouldn’t call it ~','~라고 부르진 않겠다','I wouldn’t call it a hobby.'],['FRAME','It’s not that ~','~라는 건 아니다','It’s not that I hate being a teacher.'],['FRAME','It’s not like ~','~인 것도 아니잖아','It’s not like my English is getting worse.'],['PATTERN','keep ~ing','계속 ~하다','My priorities keep changing.'],['PATTERN','end up ~ing','결국 ~하게 되다','I end up losing momentum.'],['PATTERN','find myself ~ing','나도 모르게 ~하고 있다','I find myself wanting to go home.'],
+['STATE','be around people','사람들과 함께 있다','I get tired when I’m around people for too long.'],['VERB','get drained','기가 빨리다 / 진이 빠지다','I tend to get drained pretty quickly.'],['VERB','put things off','일을 미루다','I tend to put things off until the last minute.'],['STATE','be on my phone','휴대폰을 보고/사용하고 있다','I feel like I’m on my phone too much.'],['VOCAB','some time to myself','혼자만의 시간','I usually need some time to myself.'],['VERB','help me recharge','재충전하게 해주다','Those things help me recharge.'],['VERB','connect with people','사람들과 교류하다','I still want to connect with people.'],['VERB','look something up','~을 찾아보다','I like to look up things I’m interested in.'],['VERB','work on ~','~에 공들이다 / 작업하다','I spend time working on my blog.'],['VERB','lose momentum','추진력을 잃다 / 흐지부지되다','I end up losing momentum after a few days.'],['VERB','hit a plateau','정체기에 접어들다','I feel like I’ve hit a plateau with my English.'],['VERB','build my expertise in ~','~분야의 전문성을 쌓다','I want to build my expertise in board games.'],['VERB','document the process','그 과정을 기록하다','I started a blog to document the process.'],['MODIFIER','along the way','그 과정에서','I share what I’ve learned along the way.'],['VERB','make a career out of ~','~을 직업/커리어로 만들다','Maybe I could make a career out of this.'],['VERB','explore other possibilities','다른 가능성을 탐색하다','I want to explore other possibilities.'],['PATTERN','start out + state','처음에는 ~한 상태로 시작하다','I start out really motivated.'],['FRAME','I’m starting to wonder if ~','점점 ~일 수도 있겠다는 생각이 들다','I’m starting to wonder if I could make a career out of this.']
+].map((x,i)=>({id:'d1-'+i,type:x[0],eng:x[1],kor:x[2],ex:x[3],done:false}));
+const day2Seed=[
+['VERB','get home from work','퇴근해서 집에 도착하다','When I get home from work, I usually turn on the TV.'],
+['VERB','put on some music','음악을 틀다','I usually put on some music when I cook.'],
+['PATTERN','make + person + verb','~가 …하게 만들다','Comedy shows make me laugh.'],
+['PATTERN','make ~ more enjoyable','~을 더 즐겁게 만들다','Music makes cooking more enjoyable.'],
+['VERB','change the mood','분위기나 기분을 바꾸다','Music can totally change the mood.'],
+['VERB','grab ~ off the shelf','선반에서 ~을 집어 들다','I grabbed a couple of board games off the shelf.'],
+['PATTERN','end up ~ing','결국 ~하게 되다','We ended up having dinner together instead.'],
+['VERB','keep my weekends open','주말 일정을 비워두다','I usually like to keep my weekends open.'],
+['VERB','spend time by myself','혼자만의 시간을 보내다','I enjoy spending time by myself.'],
+['VERB','have some time to myself','나만의 시간을 갖다','I really enjoy having some time to myself.'],
+['PATTERN','find myself ~ing','어느새 내가 ~하고 있음을 깨닫다','These days, I find myself enjoying going out more.'],
+['PATTERN','I feel like ~ing','~하고 싶다 / ~할 기분이다','I sometimes feel like going outside.'],
+['VERB','get some fresh air','바람을 쐬다','I go outside to get some fresh air.'],
+['VERB','take a walk in the park','공원에서 산책하다','We sometimes take a walk in the park.'],
+['VERB','look around','둘러보다','We looked around three or four stores.'],
+['VERB','have a great time','즐거운 시간을 보내다','We still had a great time.'],
+['FRAME',"I'm not really the type of person who ~",'나는 ~하는 타입이 아니다',"I'm not really the type of person who plans out my weekends."],
+['FRAME',"It's not that ~",'~라는 건 아니다',"It's not that I never make plans."],
+['FRAME',"There wasn't much to see.",'볼 것이 별로 없었다',"There wasn't much to see at the shopping center."],
+['FRAME',"There weren't that many ~",'~가 그렇게 많지 않았다',"There weren't that many clothing stores."],
+['FRAME','It was such a nice evening.','정말 좋은 저녁이었다','It was such a nice evening, and we had a great time.'],
+['FRAME',"It's definitely a big change for me.",'나에게는 확실히 큰 변화다',"It's definitely a big change for me."],
+['MODIFIER','These days, ~','요즘에는','These days, I find myself enjoying going out more.'],
+['MODIFIER','Until last year, ~','작년까지는','Until last year, I preferred staying home.'],
+['MODIFIER','Actually, ~','사실 / 실제로','Actually, even when I am home, I sometimes want to go outside.'],
+['MODIFIER','Other times, ~','또 어떨 때는','Other times, I read books.'],
+['MODIFIER','Even when ~','심지어 ~할 때도','Even when I do housework, I put on some music.'],
+['MODIFIER','Especially ~','특히','I enjoy going out, especially with my boyfriend.'],
+['MODIFIER','instead','대신에','We ended up having dinner together instead.'],
+['MODIFIER','kind of like ~','약간 ~처럼','Music can change the mood, kind of like in movies.'],
+['MODIFIER','pretty often','꽤 자주','We play board games pretty often.'],
+['MODIFIER','whenever ~','~할 때마다','I play board games whenever I have some free time.'],
+['FRAME',"That's an interesting question.",'흥미로운 질문이네요','That’s an interesting question.'],
+['FRAME',"Here's the thing.",'있잖아 / 문제는 말이야',"Here's the thing. I usually like to keep my weekends open."],
+['FRAME','You know, ~','있잖아 / 자연스러운 연결','You know, music can totally change the mood.'],
+['FRAME',"I don't know why, but ~",'왜 그런지는 모르겠는데',"I don't know why, but I just want to get some fresh air."],
+['FRAME',"It wasn't what we originally planned, but ~",'원래 계획은 아니었지만',"It wasn't what we originally planned, but we still had a good time."],
+['FRAME','We still had a good time.','그래도 즐거웠다','We still had a good time.']
+].map((x,i)=>({id:'d2-'+i,type:x[0],eng:x[1],kor:x[2],ex:x[3],done:false}));
+const typeMap={
+'I feel like ~':'FRAME','I’d say ~':'FRAME','I guess ~':'FRAME','I wouldn’t say ~':'FRAME','I wouldn’t call it ~':'FRAME','It’s not that ~':'FRAME','It’s not like ~':'FRAME','I’m starting to wonder if ~':'FRAME',
+'I tend to ~':'PATTERN','keep ~ing':'PATTERN','end up ~ing':'PATTERN','find myself ~ing':'PATTERN','start out + state':'PATTERN',
+'pretty + adjective':'MODIFIER','kind of ~':'MODIFIER','not really':'MODIFIER','along the way':'MODIFIER',
+'be around people':'STATE','be on my phone':'STATE','some time to myself':'STATE'
+};
+let data=JSON.parse(localStorage.getItem('chunkVaultData')||'null')||{days:[{id:1,name:'DAY 1',cards:seed}],active:1};
+// Add DAY 2 once for existing local/cloud vaults without touching DAY 1 progress.
+if(!data.days.some(d=>d.id===2||d.name==='DAY 2')) data.days.push({id:2,name:'DAY 2',cards:day2Seed});
+let cloudUser=null, unsubscribeCloud=null, applyingCloud=false;
+// Reclassify legacy cloud/local cards without changing their wording, examples, or memorization status.
+const strictTypeMap={
+  'some time to myself':'VOCAB','have some time to myself':'VERB','I feel like ~ing':'PATTERN',
+  "There wasn't much to see.":'FRAME',"There weren't that many ~":'FRAME',
+  'It was such a nice evening.':'FRAME',"It's definitely a big change for me.":'FRAME'
+};
+// migrate old two-category data while preserving memorization checks and edits
+for(const d of data.days){for(const c of d.cards){if(c.type==='ACTION') c.type='VERB'; if(strictTypeMap[c.eng]) c.type=strictTypeMap[c.eng]; if(!CAT[c.type]) c.type=typeMap[c.eng]||'VERB';}}
+
+function normalizeTypes(){for(const d of data.days){for(const c of d.cards){if(c.type==='ACTION') c.type='VERB'; if(strictTypeMap[c.eng]) c.type=strictTypeMap[c.eng]; if(!CAT[c.type]) c.type=typeMap[c.eng]||'VERB';}}}
+let hidden=false, krFirst=true, onlyUnlearned=false, editing=null, activeCat='ALL';
+const $=s=>document.querySelector(s);
+const localSave=()=>localStorage.setItem('chunkVaultData',JSON.stringify(data));
+const saveData=()=>{localSave(); if(cloudUser&&!applyingCloud){const C=window.__cloud; C.setDoc(C.doc(C.db,'users',cloudUser.uid,'vault','main'),{data,updatedAt:Date.now()}).catch(e=>console.error('Cloud save failed',e));}}; localSave();
+function activeDay(){return data.days.find(d=>d.id===data.active)||data.days[0]}
+function render(){const d=activeDay(); $('#tabs').innerHTML=data.days.map(x=>`<button class="tab ${x.id===data.active?'active':''}" onclick="setDay(${x.id})">${x.name}</button>`).join('');
+$('#cats').innerHTML=`<button class="catbtn ${activeCat==='ALL'?'active':''}" onclick="setCat('ALL')">전체</button>`+Object.entries(CAT).map(([k,v])=>`<button data-cat="${k}" class="catbtn ${activeCat===k?'active':''}" onclick="setCat('${k}')">${v.icon} ${v.label}</button>`).join('');
+let cards=d.cards.filter(c=>(activeCat==='ALL'||c.type===activeCat)&&(!onlyUnlearned||!c.done)&&(!$('#search').value||(`${c.eng} ${c.kor}`).toLowerCase().includes($('#search').value.toLowerCase())));
+const groups=activeCat==='ALL'?Object.keys(CAT):[activeCat];
+$('#content').innerHTML=groups.map(g=>{let arr=cards.filter(c=>c.type===g),m=CAT[g];return `<div class="sectionHead"><h2>${m.icon} ${m.label} <span style="font-weight:400;color:#777;font-size:13px">· ${m.desc}</span></h2><span class="count">${arr.length}개</span></div>${arr.length?`<div class="grid">${arr.map(cardHTML).join('')}</div>`:`<div class="empty">표현이 없어요.</div>`}`}).join('');
+const total=d.cards.length, done=d.cards.filter(c=>c.done).length,p=total?Math.round(done/total*100):0;$('#progressText').textContent=`${done} / ${total} 암기 완료 · ${p}%`;$('#bar').style.width=p+'%';$('#toggleAll').textContent=hidden?'👁 뜻 전체 보기':'👁 뜻 전체 가리기';$('#direction').textContent=krFirst?'KR → EN':'EN → KR';$('#unlearned').classList.toggle('active',onlyUnlearned)}
+function cardHTML(c){let prompt=krFirst?c.kor:c.eng, answer=krFirst?c.eng:c.kor,m=CAT[c.type];return `<div class="card ${c.done?'done':''}"><div class="row"><span class="tag">${m.icon} ${m.label}</span><button class="mini memorize" onclick="toggleDone('${c.id}')">${c.done?'✓ 외웠어요':'○ 암기 체크'}</button></div><div class="eng">${prompt}</div><div class="meaning ${hidden?'hidden':''}" onclick="this.classList.toggle('hidden')">${answer}</div><div class="example ${hidden?'hidden':''}" onclick="this.classList.toggle('hidden')">${c.ex}</div><div class="actions"><button class="mini" onclick="reveal(this)">뜻 보기/가리기</button><button class="mini" onclick="editCard('${c.id}')">수정</button><button class="mini danger" onclick="delCard('${c.id}')">삭제</button></div></div>`}
+window.setDay=id=>{data.active=id;saveData();render()};window.setCat=c=>{activeCat=c;render()};window.toggleDone=id=>{let c=activeDay().cards.find(x=>x.id===id);c.done=!c.done;saveData();render()};window.reveal=el=>{let c=el.closest('.card');c.querySelector('.meaning').classList.toggle('hidden');c.querySelector('.example').classList.toggle('hidden')};window.delCard=id=>{if(confirm('이 표현을 삭제할까요?')){activeDay().cards=activeDay().cards.filter(x=>x.id!==id);saveData();render()}};
+window.editCard=id=>{editing=id;let c=activeDay().cards.find(x=>x.id===id);$('#fType').value=c.type;$('#fEng').value=c.eng;$('#fKor').value=c.kor;$('#fEx').value=c.ex;$('#modalTitle').textContent='표현 수정';$('#modal').classList.add('open')};
+async function initCloud(){
+ const C=window.__cloud; if(!C){setTimeout(initCloud,50);return;}
+ try{await C.getRedirectResult(C.auth)}catch(e){console.error(e)}
+ $('#loginBtn').onclick=async()=>{try{await C.signInWithPopup(C.auth,C.provider)}catch(e){if(['auth/popup-blocked','auth/cancelled-popup-request','auth/operation-not-supported-in-this-environment'].includes(e.code)) await C.signInWithRedirect(C.auth,C.provider); else alert('Google 로그인에 실패했어요: '+e.message)}};
+ $('#logoutBtn').onclick=()=>C.signOut(C.auth);
+ C.onAuthStateChanged(C.auth,async user=>{cloudUser=user; $('#loginBtn').style.display=user?'none':''; $('#logoutBtn').style.display=user?'':'none'; $('#authStatus').textContent=user?`${user.displayName||user.email} · 동기화 중`:'로그인하면 모든 기기에서 동기화됩니다';
+ if(unsubscribeCloud){unsubscribeCloud();unsubscribeCloud=null;}
+ if(!user){render();return;}
+ const ref=C.doc(C.db,'users',user.uid,'vault','main'); const snap=await C.getDoc(ref);
+ if(snap.exists()&&snap.data().data){applyingCloud=true; data=snap.data().data; normalizeTypes(); if(!data.days.some(d=>d.id===2||d.name==='DAY 2')) data.days.push({id:2,name:'DAY 2',cards:day2Seed}); localSave(); applyingCloud=false; render();}
+ else {await C.setDoc(ref,{data,updatedAt:Date.now()});}
+ unsubscribeCloud=C.onSnapshot(ref,s=>{if(s.exists()&&s.data().data){const incoming=s.data().data;if(JSON.stringify(incoming)!==JSON.stringify(data)){applyingCloud=true;data=incoming;normalizeTypes();if(!data.days.some(d=>d.id===2||d.name==='DAY 2')){data.days.push({id:2,name:'DAY 2',cards:day2Seed});}localSave();applyingCloud=false;render();}}});
+ });
+}
+initCloud();
+$('#toggleAll').onclick=()=>{hidden=!hidden;render()};$('#direction').onclick=()=>{krFirst=!krFirst;render()};$('#unlearned').onclick=()=>{onlyUnlearned=!onlyUnlearned;render()};$('#search').oninput=render;$('#addCard').onclick=()=>{editing=null;$('#fType').value=activeCat==='ALL'?'FRAME':activeCat;$('#fEng').value=$('#fKor').value=$('#fEx').value='';$('#modalTitle').textContent='표현 추가';$('#modal').classList.add('open')};$('#addDay').onclick=()=>{let id=Math.max(...data.days.map(d=>d.id))+1;data.days.push({id,name:`DAY ${id}`,cards:[]});data.active=id;activeCat='ALL';saveData();render()};$('#cancel').onclick=()=>$('#modal').classList.remove('open');$('#save').onclick=()=>{let obj={type:$('#fType').value,eng:$('#fEng').value.trim(),kor:$('#fKor').value.trim(),ex:$('#fEx').value.trim()};if(!obj.eng||!obj.kor)return alert('영어와 뜻을 입력해 주세요.');if(editing){Object.assign(activeDay().cards.find(x=>x.id===editing),obj)}else activeDay().cards.push({id:'c'+Date.now(),...obj,done:false});saveData();$('#modal').classList.remove('open');render()};render();
+</script></body></html>
